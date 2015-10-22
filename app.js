@@ -6,7 +6,7 @@ var bodyParser= require('body-parser');
 
 var mongoose=require('mongoose');
 
-var ip = process.env.IP || '192.168.178.1',
+var ip = process.env.IP || 'localhost',
     port = process.env.PORT || 8080;
 
 var Bear     = require('./models/bear');
