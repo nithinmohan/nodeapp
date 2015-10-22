@@ -5,7 +5,9 @@ var app=express();
 var bodyParser= require('body-parser');
 
 var mongoose=require('mongoose');
-mongoose.connect('localhost:27017/test');
+
+var ip = process.env.IP || '192.168.178.1',
+    port = process.env.PORT || 8080;
 
 var Bear     = require('./models/bear');
 
@@ -13,9 +15,8 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
 //ip and ports
-var ip = process.env.IP || '192.168.178.1',
-    port = process.env.PORT || 8080;
 
+mongoose.connect(ip+':27017/test');
 //Router
 
 var router=express.Router();
