@@ -9,7 +9,7 @@ var mongoose=require('mongoose');
 var ip = process.env.IP || 'localhost',
     port = process.env.PORT || 8080;
 
-var Bear     = require('./models/bear');
+var Question     = require('./models/question');
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
@@ -27,70 +27,88 @@ router.use(function(req, res, next) {
     next(); // make sure we go to the next routes and don't stop here
 });
 
-// on routes that end in /bears
-// ----------------------------------------------------
-router.route('/bears')
 
-    // create a bear (accessed at POST http://localhost:8080/api/bears)
+
+router.route('/questions')
+
     .post(function(req, res) {
         
-        var bear = new Bear();      // create a new instance of the Bear model
-        bear.name = req.body.name;  // set the bears name (comes from the request)
+        var question = new Question();
+        question.typ = req.body.typ;
+        question.questionSchema = req.body.questionSchema;
+        question.options_list = req.body.options_list;
+        question.correct_option_index = req.body.correct_option_index;
+        question.categories = req.body.categories;
 
-        // save the bear and check for errors
-        bear.save(function(err) {
-            if (err)
+        question.save(function(err) {
+            if (err){
                 res.send(err);
+                return;
+              }
 
             res.json({ message: 'Bear created!' });
-        });
-        
-    }).get(function(req, res) {
-        Bear.find(function(err, bears) {
-            if (err)
-                res.send(err);
+        });       
+    }).
 
-            res.json(bears);
+    get(function(req, res) {
+        Question.find(function(err, questions) {
+            if (err){
+                res.send(err);
+                return;
+              }
+
+            res.json(questions);
         });
     });
 
 
-router.route('/bears/:bear_id')
+router.route('/questions/:question_id')
 
-    // get the bear with that id (accessed at GET http://localhost:8080/api/bears/:bear_id)
     .get(function(req, res) {
-        Bear.findById(req.params.bear_id, function(err, bear) {
-            if (err)
+        Question.findById(req.params.question_id, function(err, question) {
+            if (err){
                 res.send(err);
-            res.json(bear);
+                return;
+              }
+            res.json(question);
         });
     })
+
     .put(function(req, res) {
 
-        // use our bear model to find the bear we want
-        Bear.findById(req.params.bear_id, function(err, bear) {
+        Question.findById(req.params.question_id, function(err, question) {
 
-            if (err)
+            if (err){
                 res.send(err);
+                return;
+              }
 
-            bear.name = req.body.name;  // update the bears info
+            question.type = req.body.type||question.type;
+            question.questionSchema = req.body.questionSchema||question.questionSchema;
+            question.options_list = req.body.options_list||question.options_list;
+            question.correct_option = req.body.correct_option||question.correct_option;
+            question.categories = req.body.categories||question.categories;
 
-            // save the bear
-            bear.save(function(err) {
-                if (err)
+            question.save(function(err) {
+                if (err){
                     res.send(err);
+                    return;
+                  }
 
-                res.json({ message: 'Bear updated!' });
+                res.json({ message: 'question updated!' });
             });
 
         });
     })
+
     .delete(function(req, res) {
-        Bear.remove({
-            _id: req.params.bear_id
-        }, function(err, bear) {
-            if (err)
+        Question.remove({
+            _id: req.params.question_id
+        }, function(err, question) {
+            if (err){
                 res.send(err);
+                return;
+              }
 
             res.json({ message: 'Successfully deleted' });
         });
@@ -99,11 +117,10 @@ router.route('/bears/:bear_id')
 
 
 router.get('/',function(req,res){
-  res.json({msg:'yup'});
+  res.json({msg:'Reached home page'});
 })
 
 app.use('/',router);
 
-// Listen on port 8000, IP defaults to 127.0.0.1
 
 app.listen(port);
