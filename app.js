@@ -34,7 +34,7 @@ router.route('/questions')
     .post(function(req, res) {
         
         var question = new Question();
-        question.typ = req.body.typ;
+        question.type = req.body.type;
         question.questionSchema = req.body.questionSchema;
         question.options_list = req.body.options_list;
         question.correct_option_index = req.body.correct_option_index;
