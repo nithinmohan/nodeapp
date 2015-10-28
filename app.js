@@ -24,6 +24,8 @@ app.use(bodyParser.json());
 //Routing
 
 app.use('/',HomeRouter);
+
+
 app.use('/api/questions',QuestionsRouter);
 
 app.listen(port);
