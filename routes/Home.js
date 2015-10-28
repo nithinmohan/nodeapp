@@ -1,6 +1,7 @@
 var express = require('express');
 var router=express.Router();
 var User= require('.././models/user.js');
+var jwt    = require('jsonwebtoken');
 
 router.use(function(req, res, next) {
     // do logging
@@ -22,7 +23,7 @@ router.get('/setup',function(req,res){
 		res.json({message:'sample user created'});
 	})
 });
-router.post('/authenticate', function(req, res) {
+router.post('/login', function(req, res) {
   User.findOne({
     name: req.body.name
   }, function(err, user) {
@@ -51,6 +52,17 @@ router.post('/authenticate', function(req, res) {
       }   
     }
   });
+});
+router.post('/signup', function(req, res) {
+	var user=new User();
+ 	user.name=req.body.name;
+ 	user.password=req.body.password;
+ 	user.save(function(err){
+ 		if(err){
+ 			res.send(err);
+ 		}
+ 		res.json({ message: 'new user added signin now' });
+ 	})
 });
 router.get('/',function(req,res){
   res.json({msg:'Reached home page'});

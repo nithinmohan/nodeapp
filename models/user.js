@@ -5,9 +5,9 @@ var UserSchema= new Schema({
 	name  :String,
 	password: String,
 	role:  {	type	:	String,	
-				enum:["normal","admin"]
+				enum:["normal","admin"],
+				default:"normal"
 			} 
 	
 })
-
 module.exports=mongoose.model('User',UserSchema);
