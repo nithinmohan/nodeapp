@@ -11,7 +11,7 @@ var ip = process.env.IP || 'localhost',
     port = process.env.PORT || 8080;
 
 //Models
-var Question     = require('./models/question');
+
 
 //Routes
 var QuestionsRouter=require('./routes/Question');
